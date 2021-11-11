@@ -115,7 +115,8 @@ public class EnrolmentRepository {
                 Enrolment c = new Enrolment(
                         set.getInt(1),
                         set.getInt(2),
-                        set.getTimestamp(3).toLocalDateTime()
+                        set.getInt(3),
+                        set.getTimestamp(4).toLocalDateTime()
                 );
                 enrolments.add(c);
             }
