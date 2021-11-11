@@ -14,6 +14,7 @@ public class BookController {
 
 
     public BookController() {
+        //
         BookRepository bookRepository = new BookRepository();
         this.bookRepository = bookRepository;
         this.bookList = bookRepository.allBooksList();
@@ -21,13 +22,11 @@ public class BookController {
 
     //CRUD
     public boolean add(Book b){
-        if(b.getId()!=(lastID()+1)){
-            System.out.println("ID incorrect. Available is "+(lastID()+1));
-            return false;
-        }
         return bookList.add(b);
     }
     public boolean updateStudentID(int id, int newStudentID){
+
+
         bookList.get(id).setStudentID(newStudentID);
         return bookList.get(id).getStudentID()==newStudentID;
     }
@@ -40,6 +39,9 @@ public class BookController {
         return bookList.get(id).getCreatedAT().equals(newDate);
     }
     public boolean delete(int id){
+
+
+
         bookList.remove(id);
         return bookList.get(id)==null;
     }
@@ -64,12 +66,8 @@ public class BookController {
 
     //Probleme
     public int lastID(){
-        int last = 0;
-        Iterator<Book> it = bookList.iterator();
-        while (it.hasNext()){
-            last=it.next().getId();
-        }
-        return last;
+
+        return bookRepository.lastID();
     }
 
 }

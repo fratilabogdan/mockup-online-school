@@ -23,6 +23,9 @@ public class Enrolment implements Comparable<Enrolment>{
     public int getId(){
         return id;
     }
+    public void setId(int id){
+        this.id=id;
+    }
 
     public int getStudentID() {
         return studentID;
@@ -63,7 +66,7 @@ public class Enrolment implements Comparable<Enrolment>{
     }
     @Override
     public String toString(){
-        return studentID+","+courseID+","+createdAt;
+        return id+","+studentID+","+courseID+","+createdAt;
     }
 
 }

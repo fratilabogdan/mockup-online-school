@@ -1,6 +1,5 @@
 package ro.company.repository;
 import ro.company.helpers.Helpers;
-import ro.company.model.Course;
 import ro.company.model.Enrolment;
 import java.sql.Connection;
 import java.sql.Statement;
@@ -8,7 +7,6 @@ import java.sql.Statement;
 import java.sql.*;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 
 public class EnrolmentRepository {
@@ -80,11 +78,15 @@ public class EnrolmentRepository {
                         set.getTimestamp(4).toLocalDateTime()
                 );
                 enrolments.add(en);
+
             }
+            return enrolments.get(0);
         }catch (Exception e){
-            System.out.println("Error on enrolmentGet");
+         e.printStackTrace();
+
+            return null;
         }
-        return enrolments.get(0);
+
     }
 
     public ResultSet byID(int id){
@@ -123,7 +125,7 @@ public class EnrolmentRepository {
         }catch (Exception e){
             System.out.println("Error on lastID");
         }
-        return enrolments.get(0).getCourseID();
+        return enrolments.get(0).getId();
     }
 
     //CRUD
@@ -132,13 +134,21 @@ public class EnrolmentRepository {
         instertTO+=String.format("(%d,%d,'%s');",e.getStudentID(),e.getCourseID(),Helpers.localDateSQLconvert(e.getCreatedAt()));
         return execute(instertTO);
     }
-    public boolean updateCourseID(int studentID, int newCourseID){
-        String update="update enrolment set course_id="+newCourseID+" where student_id="+studentID;
+    public boolean updateCourseID(int id, int newCourseID){
+        String update="update enrolment set course_id="+newCourseID+" where id="+id;
         return execute(update);
     }
-    public boolean updateCreatedAt(int studentID, LocalDateTime newDate){
-        String update="update enrolment set created_at='"+Helpers.localDateSQLconvert(newDate)+"' where student_id="+studentID;
+    public boolean updateStudentID(int id, int newStudentID){
+        String update="update enrolment set student_id="+newStudentID+" where id="+id;
         return execute(update);
+    }
+    public boolean updateCreatedAt(int ID, LocalDateTime newDate){
+        String update="update enrolment set created_at='"+Helpers.localDateSQLconvert(newDate)+"' where id="+ ID;
+        return execute(update);
+    }
+    public boolean delete(int id){
+            String del ="delete enrolment from enrolment where id="+id;
+            return execute(del);
     }
 
 }

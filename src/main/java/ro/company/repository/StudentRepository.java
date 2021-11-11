@@ -1,12 +1,8 @@
 package ro.company.repository;
-import ro.company.helpers.Helpers;
-import ro.company.model.Book;
 import ro.company.model.Student;
 
 import java.sql.*;
-import java.time.LocalDateTime;
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 
 
@@ -67,52 +63,91 @@ public class StudentRepository {
         return students;
     }
     public Student getStudent(int id){
-        if(allStudentList().size()<id){
+        ResultSet set=byID(id);
+        List<Student> students = new ArrayList<>();
+        try {
+            while (set.next()){
+                Student s = new Student(
+                        set.getInt(1),
+                        set.getString(2),
+                        set.getString(3),
+                        set.getString(4),
+                        set.getInt(5)
+                );
+                students.add(s);
+            }
+            return students.get(0);
+        }catch (Exception e){
+            e.printStackTrace();
+
             return null;
         }
-        int i=0;
-        Iterator<Student> it = allStudentList().iterator();
-        while (it.hasNext() && it.next().getId()!=id){
-            i++;
-        }
-        return allStudentList().get(i);
     }
+    public ResultSet byID(int id){
+        String toID="select*from student where id="+id;
+        execute(toID);
+        try {
+            return statement.getResultSet();
+        }catch (Exception e){
+            System.out.println("byID failed to return.Returned NULL instead");
+            return null;
+        }
+    }
+    public ResultSet byLastID(){
+        String toID="select * from student where id=(select max(id) from student)";
+        execute(toID);
+        try {
+            return statement.getResultSet();
+        }catch (Exception e){
+            System.out.println("byID failed to return.Returned NULL instead");
+            return null;
+        }
+    }
+    public int lastID(){
+        ResultSet set=byLastID();
+        List<Student> students = new ArrayList<>();
+        try {
+            while (set.next()){
+                Student s = new Student(
+                        set.getInt(1),
+                        set.getString(2),
+                        set.getString(3),
+                        set.getString(4),
+                        set.getInt(5)
+                );
+                students.add(s);
+            }
+        }catch (Exception e){
+            System.out.println("Error on lastID");
+        }
+        return students.get(0).getId();
+    }
+
 
     //CRUD
     public boolean add(Student s){
-        if(s.getId()>(allStudentList().size()+1)){
-            System.out.println("Student ID too high. Next free value is "+(allStudentList().size()+1));
-            return false;
-        }
+
         String insertTO="insert into student (first_name, last_name, email, age) VALUES";
         insertTO+=String.format("('%s','%s','%s',%d);",s.getFirstName(),s.getLastName(),s.getEmail(),s.getAge());
         return execute(insertTO);
     }
     public boolean updateFirstName(int id, String newFName){
-        if(getStudent(id)==null){
-            return false;
-        }
+
         String update = "update student set first_name='"+newFName+"' where id="+id;
         return execute(update);
     }
     public boolean updateLastName(int id,String newLName){
-        if(getStudent(id)==null){
-            return false;
-        }
+
         String update="update student set last_name='"+newLName+"' where id="+id;
         return execute(update);
     }
     public boolean updateEmail(int id,String newEmail){
-        if(getStudent(id)==null){
-            return false;
-        }
+
         String update="update student set email='"+newEmail+"' where id="+id;
         return execute(update);
     }
     public boolean updateAge(int id, int newAge){
-        if(getStudent(id)==null){
-            return false;
-        }
+
         String update="update student set age="+newAge+" where id="+id;
         return execute(update);
     }
