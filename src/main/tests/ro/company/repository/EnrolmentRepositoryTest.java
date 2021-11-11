@@ -12,6 +12,11 @@ class EnrolmentRepositoryTest {
         assertEquals(true, enrolmentRepository.getEnrolment(1).getCourseID()==1);
     }
     @Test
+    public void testGetEnrolmentFalse(){
+        EnrolmentRepository enrolmentRepository = new EnrolmentRepository();
+        assertEquals(true, enrolmentRepository.getEnrolment(1).getCourseID()!=1);
+    }
+    @Test
     public void testAllEnrolmentTrue(){
         EnrolmentRepository enrolmentRepository = new EnrolmentRepository();
         assertEquals(true, enrolmentRepository.allEnrolment()!=null);
@@ -28,8 +33,7 @@ class EnrolmentRepositoryTest {
         assertEquals(true, enrolmentRepository.allEnrolmentList()!=null);
     }
 
-    @Test
-    public void test
+
 
 
 
