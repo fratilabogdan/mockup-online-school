@@ -21,13 +21,7 @@ class BookControllerTest {
     @Test
     public void testGetBookTrue(){
         BookController bookController = new BookController();
-
         assertEquals(true, bookController.getBook(1).getBookName()!=null);
-    }
-    @Test
-    public void testGetBookFalse(){
-        BookController bookController = new BookController();
-        assertEquals(false, bookController.getBook(9999)!=null);
     }
     @Test
     public void testAddTrue(){
@@ -41,7 +35,6 @@ class BookControllerTest {
         assertEquals(true, bookController.getBook(1).getStudentID()==2);
     }
     @Test
-    @Disabled
     public void testUpdateBookNameTrue(){
         BookController bookController = new BookController();
         bookController.updateBookName(1,"Test");
@@ -53,17 +46,16 @@ class BookControllerTest {
         LocalDateTime test = LocalDateTime.now();
         bookController.add(new Book(1,"Test Book Name",test));
         int initial = bookController.lastID();
-        LocalDateTime updatedT = LocalDateTime.now();
+        LocalDateTime updatedT = LocalDateTime.of(2012,12,12,12,12,12);
         bookController.updateCreatedAt(initial,updatedT);
         assertEquals(true, bookController.getBook(initial).getCreatedAT().equals(updatedT));
     }
     @Test
-    @Disabled
     public void testDeleteTrue(){
         BookController bookController = new BookController();
-        int id = bookController.lastID()+1;
-        bookController.add(new Book(id,1,"TestName",LocalDateTime.now()));
-        assertEquals(bookController.lastID(), bookController.getBook(85).getId());
-//        assertEquals(true,bookController.getBook(id).getBookName().equals("TestName"));
+        bookController.add(new Book(1,"TestName",LocalDateTime.now()));
+        int id = bookController.lastID();
+        assertEquals(bookController.lastID(), bookController.getBook(id).getId());
+
     }
 }

@@ -14,7 +14,6 @@ public class BookController {
 
 
     public BookController() {
-        //
         BookRepository bookRepository = new BookRepository();
         this.bookRepository = bookRepository;
         this.bookList = bookRepository.allBooksList();
@@ -22,21 +21,16 @@ public class BookController {
 
     //CRUD
     public boolean add(Book b){
-        return bookList.add(b);
+        return bookRepository.add(b);
     }
     public boolean updateStudentID(int id, int newStudentID){
-
-
-        bookList.get(id).setStudentID(newStudentID);
-        return bookList.get(id).getStudentID()==newStudentID;
+        return bookRepository.updateStudentID(id,newStudentID);
     }
     public boolean updateBookName(int id, String newBookName){
-        bookList.get(id).setBookName(newBookName);
-        return bookList.get(id).getBookName().equals(newBookName);
+        return bookRepository.updateBookName(id,newBookName);
     }
     public boolean updateCreatedAt(int id, LocalDateTime newDate){
-        bookList.get(id).setCreatedAT(newDate);
-        return bookList.get(id).getCreatedAT().equals(newDate);
+        return bookRepository.updateCreatedAt(id, newDate);
     }
     public boolean delete(int id){
 
@@ -48,20 +42,7 @@ public class BookController {
 
     //Utility
     public Book getBook(int id){
-        if(id>lastID()){
-            return null;
-        }
-
-        Iterator<Book> it = bookList.iterator();
-        Book b = it.next();
-
-        while (it.hasNext()&&b.getId()!=id){
-            b=it.next();
-        }
-        if(b.getId()==id){
-            return b;
-        }
-        return null;
+        return bookRepository.getBook(id);
     }
 
     //Probleme
