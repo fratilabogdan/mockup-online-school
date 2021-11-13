@@ -37,8 +37,11 @@ class BookControllerTest {
     @Test
     public void testUpdateBookNameTrue(){
         BookController bookController = new BookController();
-        bookController.updateBookName(1,"Test");
-        assertEquals(true, bookController.getBook(1).getBookName().equals("Test"));
+        bookController.add(new Book(1,"Update",LocalDateTime.now()));
+        bookController.updateBookName(bookController.lastID(), "Test");
+        System.out.println(bookController.getBook(bookController.lastID()).getBookName());
+        assertEquals(true, bookController.getBook(bookController.lastID()).getBookName().equals("Test"));
+        bookController.delete(bookController.lastID());
     }
     @Test
     public void testUpdateCreatedAtTrue(){
@@ -51,11 +54,49 @@ class BookControllerTest {
         assertEquals(true, bookController.getBook(initial).getCreatedAT().equals(updatedT));
     }
     @Test
+    public void testUpdateCreatedAtFalse(){
+        BookController bookController = new BookController();
+        LocalDateTime test = LocalDateTime.now();
+        bookController.add(new Book(1,"Test Book Name",test));
+        int initial = bookController.lastID();
+        LocalDateTime updatedT = LocalDateTime.of(12,12,12,12,12,12);
+        bookController.updateCreatedAt(initial,updatedT);
+        assertEquals(false, bookController.getBook(initial).getCreatedAT().equals(updatedT));
+    }
+    @Test
     public void testDeleteTrue(){
         BookController bookController = new BookController();
         bookController.add(new Book(1,"TestName",LocalDateTime.now()));
         int id = bookController.lastID();
         assertEquals(bookController.lastID(), bookController.getBook(id).getId());
-
+        bookController.delete(id);
+    }
+    @Test
+    public void duplicateTrue(){
+        BookController bookController = new BookController();
+        bookController.add(new Book(1,"TestName",LocalDateTime.now()));
+        Book b = new Book(1,"TestName",LocalDateTime.now());
+        assertEquals(true, bookController.duplicate(b));
+        bookController.delete(bookController.lastID());
+    }
+    @Test
+    public void duplicateFalse(){
+        BookController bookController = new BookController();
+        bookController.add(new Book(1,"TestName",LocalDateTime.now()));
+        Book b = new Book(1,"Test Name",LocalDateTime.now());
+        assertEquals(false, bookController.duplicate(b));
+        bookController.delete(bookController.lastID());
+    }
+    @Test
+    public void testDuplicateRemoves(){
+        BookController bookController = new BookController();
+        bookController.removeDuplicates();
+    }
+    @Test
+    public void testNbDuplicates(){
+        BookController bookController = new BookController();
+        bookController.add(new Book(1,"Killing",LocalDateTime.now()));
+        Book book = new Book(1,"Killing2",LocalDateTime.now());
+        System.out.println(bookController.nbOfDuplicates(book));
     }
 }
