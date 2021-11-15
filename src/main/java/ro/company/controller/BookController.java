@@ -52,6 +52,9 @@ public class BookController {
         return bookRepository.updateCreatedAt(id, newDate);
     }
     public boolean delete(int id){
+        if(containsID(id)==false){
+            return false;
+        }
         return bookRepository.delete(id);
     }
 
@@ -63,14 +66,14 @@ public class BookController {
         return bookRepository.lastID();
     }
     public boolean duplicate(Book book){
-        if(nbOfDuplicates(book)>=1){
+        if(nbOfDuplicates(book)>=2){
             return true;
         }
         return false;
     }
     public int nbOfDuplicates(Book b){
         int count=0;
-        Iterator<Book> it = bookList.listIterator();
+        Iterator<Book> it = bookRepository.allBooksList().iterator();
         while (it.hasNext()){
             Book bk = it.next();
             if(bk.getBookName().equals(b.getBookName())){
@@ -79,17 +82,32 @@ public class BookController {
         }
         return count;
     }
-    public void removeDuplicates(){
+    public boolean removeDuplicates(){
         int count=0;
         Iterator<Book> it = bookRepository.allBooksList().iterator();
         while (it.hasNext()){
             Book b = it.next();
-            if(nbOfDuplicates(b)>=2){
+            if(nbOfDuplicates(b)>=3){
                 count++;
                 bookRepository.delete(b.getId());
             }
         }
+        if(count>=1){
+            System.out.println("Total duplicates removed: "+count);
+            return true;
+        }
         System.out.println("Total duplicates removed: "+count);
+        return false;
+    }
+    public boolean containsID(int id){
+        Iterator<Book> it = bookRepository.allBooksList().iterator();
+        while (it.hasNext()){
+            Book bk = it.next();
+            if(bk.getId()==id){
+                return true;
+            }
+        }
+        return false;
     }
 
     //Control

@@ -12,27 +12,47 @@ class BookControllerTest {
     @Test
     public void testLastID(){
         BookController bookController = new BookController();
-        bookController.add(new Book(1,"t",LocalDateTime.now()));
+        bookController.add(new Book(1,"tt",LocalDateTime.now()));
         int i= bookController.lastID();
-        bookController.add(new Book(1,"t",LocalDateTime.now()));
+        bookController.add(new Book(1,"ttt",LocalDateTime.now()));
         int i2=bookController.lastID();
         assertEquals(i2, bookController.lastID());
+        bookController.delete(i);
+        bookController.delete(i2);
     }
     @Test
     public void testGetBookTrue(){
         BookController bookController = new BookController();
-        assertEquals(true, bookController.getBook(1).getBookName()!=null);
+        bookController.add(new Book(1,"t",LocalDateTime.now()));
+        int i= bookController.lastID();
+        assertEquals(true, bookController.getBook(i).getBookName()!=null);
+        bookController.delete(i);
     }
     @Test
     public void testAddTrue(){
         BookController bookController = new BookController();
-        assertEquals(true, bookController.add(new Book(bookController.lastID()+1, 1,"BookTest", LocalDateTime.now())));
+        assertEquals(true, bookController.add(new Book(1,"BookTest999", LocalDateTime.now())));
+        bookController.delete(bookController.lastID());
+    }
+    @Test
+    public void testAddFalse(){
+        BookController bookController = new BookController();
+        Book book = new Book(1,"Testing False",LocalDateTime.now());
+        bookController.add(book);
+        int i=bookController.lastID();
+        System.out.println(i);
+        System.out.println(book.getId());
+        assertEquals(false, bookController.add(book));
+        bookController.delete(i);
     }
     @Test
     public void testUpdateStudentIDTrue(){
         BookController bookController = new BookController();
-        bookController.updateStudentID(1, 2);
-        assertEquals(true, bookController.getBook(1).getStudentID()==2);
+        bookController.add(new Book(1,"tt",LocalDateTime.now()));
+        int i= bookController.lastID();
+        bookController.updateStudentID(i, 2);
+        assertEquals(true, bookController.getBook(i).getStudentID()==2);
+        bookController.delete(i);
     }
     @Test
     public void testUpdateBookNameTrue(){
@@ -66,21 +86,20 @@ class BookControllerTest {
     @Test
     public void testDeleteTrue(){
         BookController bookController = new BookController();
-        bookController.add(new Book(1,"TestName",LocalDateTime.now()));
+        bookController.add(new Book(1,"Test Del True",LocalDateTime.now()));
         int id = bookController.lastID();
-        assertEquals(bookController.lastID(), bookController.getBook(id).getId());
-        bookController.delete(id);
+        assertEquals(true, bookController.delete(id));
     }
     @Test
-    public void duplicateTrue(){
+    public void testDeleteFalse(){
         BookController bookController = new BookController();
-        bookController.add(new Book(1,"TestName",LocalDateTime.now()));
-        Book b = new Book(1,"TestName",LocalDateTime.now());
-        assertEquals(true, bookController.duplicate(b));
-        bookController.delete(bookController.lastID());
+        bookController.add(new Book(1,"Test Del False",LocalDateTime.now()));
+        int id = bookController.lastID();
+        bookController.delete(id);
+        assertEquals(false, bookController.delete(id));
     }
     @Test
-    public void duplicateFalse(){
+    public void testduplicateFalse(){
         BookController bookController = new BookController();
         bookController.add(new Book(1,"TestName",LocalDateTime.now()));
         Book b = new Book(1,"Test Name",LocalDateTime.now());
@@ -90,13 +109,20 @@ class BookControllerTest {
     @Test
     public void testDuplicateRemoves(){
         BookController bookController = new BookController();
-        bookController.removeDuplicates();
+        assertEquals(false, bookController.removeDuplicates());
     }
     @Test
     public void testNbDuplicates(){
         BookController bookController = new BookController();
-        bookController.add(new Book(1,"Killing",LocalDateTime.now()));
         Book book = new Book(1,"Killing2",LocalDateTime.now());
-        System.out.println(bookController.nbOfDuplicates(book));
+        bookController.add(book);
+        int i=bookController.lastID();
+        Book book2 = new Book(1,"Killing2",LocalDateTime.now());
+        bookController.add(book2);
+        int i2=bookController.lastID();
+        assertEquals(2,bookController.nbOfDuplicates(book));
+        assertEquals(2,bookController.nbOfDuplicates(book2));
+        bookController.delete(i);
+        bookController.delete(i2);
     }
 }
