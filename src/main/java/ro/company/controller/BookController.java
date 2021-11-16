@@ -60,6 +60,9 @@ public class BookController {
 
     //Utility
     public Book getBook(int id){
+        if(containsID(id)==false){
+            return null;
+        }
         return bookRepository.getBook(id);
     }
     public int lastID(){
