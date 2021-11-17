@@ -1,9 +1,11 @@
 package ro.company.controller;
 
+import ro.company.model.Course;
 import ro.company.model.Enrolment;
 import ro.company.repository.EnrolmentRepository;
 import ro.company.repository.StudentRepository;
 
+import java.time.LocalDateTime;
 import java.util.Iterator;
 import java.util.List;
 public class EnrolmentController {
@@ -18,15 +20,51 @@ public class EnrolmentController {
 
     //CRUD
     public boolean add(Enrolment e){
-        return enrolmentRepository.add(e);
+        if(validIDs(e)==true && duplicate(e)==false){
+            return enrolmentRepository.add(e);
+        }
+        return false;
     }
     public boolean delete(int id){
-        return enrolmentRepository.delete(id);
+        if(containsID(id)){
+            return enrolmentRepository.delete(id);
+        }
+        return false;
+    }
+    public boolean updateStudentID(int id, int newStudentID){
+        Enrolment enrolment = new Enrolment(1,1, LocalDateTime.now());
+        enrolment=getEnrolment(id);
+        enrolment.setStudentID(newStudentID);
+        if(validIDs(getEnrolment(id))){
+            return enrolmentRepository.updateStudentID(id,newStudentID);
+        }
+        return false;
+    }
+    public boolean updateCourseID(int id, int newCourseID){
+        Enrolment enrolment = new Enrolment(1,1, LocalDateTime.now());
+        enrolment=getEnrolment(id);
+        enrolment.setCourseID(newCourseID);
+        if(validIDs(getEnrolment(id))==true && duplicate(enrolment)==false){
+            return enrolmentRepository.updateCourseID(id,newCourseID);
+        }
+        return false;
+    }
+    public boolean updateCreatedAt(int id, LocalDateTime newDate){
+        Enrolment enrolment = new Enrolment(1,1, LocalDateTime.now());
+        enrolment=getEnrolment(id);
+        enrolment.setCreatedAt(newDate);
+        if(validIDs(getEnrolment(id))==true && getEnrolment(id).getCreatedAt().equals(newDate)==false){
+            return enrolmentRepository.updateCreatedAt(id,newDate);
+        }
+        return false;
     }
 
     //Utility
     public Enrolment getEnrolment(int id){
-        return enrolmentRepository.getEnrolment(id);
+        if(containsID(id)){
+            return enrolmentRepository.getEnrolment(id);
+        }
+        return null;
     }
     public int lastID(){
         return enrolmentRepository.lastID();
@@ -54,6 +92,16 @@ public class EnrolmentController {
         if(courseController.containsID(e.getCourseID()) &&
                 studentController.containsID(e.getStudentID())){
             return true;
+        }
+        return false;
+    }
+    public boolean containsID(int id){
+        Iterator<Enrolment> it = enrolmentRepository.allEnrolmentList().iterator();
+        while (it.hasNext()){
+            Enrolment bk = it.next();
+            if(bk.getId()==id){
+                return true;
+            }
         }
         return false;
     }

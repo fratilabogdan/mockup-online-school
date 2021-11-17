@@ -13,15 +13,12 @@ class BookRepositoryTest {
     @Test
     public void testGetBookTrue(){
         BookRepository bookRepository = new BookRepository();
-        assertEquals(true, bookRepository.getBook(1).getId()==1);
+        Book book = new Book(1,"Repo add book", LocalDateTime.now());
+        bookRepository.add(book);
+        int i= bookRepository.lastID();
+        assertEquals(true, bookRepository.getBook(i).getId()==i);
+        bookRepository.delete(i);
     }
-    @Test
-    public void testGetBookFalse(){
-        BookRepository bookRepository = new BookRepository();
-        assertEquals(false,bookRepository.getBook(1).getId()==0);
-    }
-
-
     @Test
     public void testAllBooksTrue(){
         BookRepository bookRepository = new BookRepository();
@@ -51,17 +48,13 @@ class BookRepositoryTest {
     @Test
     public void testUpdateStudentIDTrue(){
         BookRepository bookRepository = new BookRepository();
-        bookRepository.updateStudentID(1,50);
-        assertEquals(true, bookRepository.getBook(1).getStudentID()==50);
+        Book book = new Book(1,"Repo add book", LocalDateTime.now());
+        bookRepository.add(book);
+        int i= bookRepository.lastID();
+        bookRepository.updateStudentID(i,50);
+        assertEquals(true, bookRepository.getBook(i).getStudentID()==50);
+        bookRepository.delete(i);
     }
-
-    @Test
-    public void testUpdateStudentIDFalse(){
-        BookRepository bookRepository = new BookRepository();
-        bookRepository.updateStudentID(1,244);
-        assertEquals(false, bookRepository.getBook(1).getStudentID()==244);
-    }
-
     @Test
     public void testUpdateBookNameTrue(){
         BookRepository bookRepository = new BookRepository();
@@ -97,15 +90,6 @@ class BookRepositoryTest {
         bookRepository.add(new Book(i,1,"Book Test True", LocalDateTime.of(1990,10,10,10,10,10)));
         bookRepository.delete(i);
         assertEquals(false, bookRepository.lastID()==i);
-    }
-
-    @Test
-    public void testDeleteFalse(){
-        BookRepository bookRepository = new BookRepository();
-        int i=bookRepository.lastID();
-        bookRepository.add(new Book(i,1,"Book Test True", LocalDateTime.of(1990,10,10,10,10,10)));
-        bookRepository.delete(i+1);
-        assertEquals(true, bookRepository.lastID()==i);
     }
 
 

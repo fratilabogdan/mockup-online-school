@@ -40,13 +40,9 @@ class CourseRepositoryTest {
     public void testAdd(){
         CourseRepository courseRepository = new CourseRepository();
         courseRepository.add(new Course(206,"Course Test", "Department Test"));
-        assertEquals(true, courseRepository.getCourse(206).getId()==206);
-    }
-    @Test
-    public void testAddFalse(){
-        CourseRepository courseRepository = new CourseRepository();
-        courseRepository.add(new Course(2000,"Course Test2000", "Department Test"));
-        assertEquals(false, courseRepository.getCourse(courseRepository.lastID()).getId()==2000);
+        int i= courseRepository.lastID();
+        assertEquals(true, courseRepository.getCourse(i).getId()==i);
+        courseRepository.delete(i);
     }
     @Test
     public void testUpdateCourseNameTrue(){

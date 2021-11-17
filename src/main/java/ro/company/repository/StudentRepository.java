@@ -151,4 +151,8 @@ public class StudentRepository {
         String update="update student set age="+newAge+" where id="+id;
         return execute(update);
     }
+    public boolean delete(int id){
+        String del="delete student from student where id="+id;
+        return execute(del);
+    }
 }
