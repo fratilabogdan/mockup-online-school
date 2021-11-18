@@ -2,6 +2,7 @@ package ro.company.controller;
 
 import ro.company.model.Book;
 import ro.company.model.Course;
+import ro.company.model.Enrolment;
 import ro.company.repository.CourseRepository;
 
 import java.util.Iterator;
@@ -51,6 +52,16 @@ public class CourseController {
     public Course getCourse(int id){
         return courseRepository.getCourse(id);
     }
+    public int getCourseIDfromName(String name){
+        Iterator<Course> it = courseRepository.allCourseList().iterator();
+        while (it.hasNext()){
+            Course course = it.next();
+            if(course.getName().equals(name)){
+                return course.getId();
+            }
+        }
+        return 0;
+    }
     public boolean duplicate(Course course){
         if(nbOfDuplicates(course)>=2){
             return true;
@@ -98,4 +109,11 @@ public class CourseController {
         }
         return false;
     }
+    public void showAllCourses(){
+        Iterator<Course> it=courseRepository.allCourseList().iterator();
+        while (it.hasNext()){
+            System.out.println(it.next().getName().toString());
+        }
+    }
+
 }

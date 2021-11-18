@@ -14,6 +14,12 @@ public class Student implements Comparable<Student>{
         this.email = email;
         this.age = age;
     }
+    public Student(String firstName, String lastName, String email, int age) {
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.email = email;
+        this.age = age;
+    }
 
     public int getId() {
         return id;

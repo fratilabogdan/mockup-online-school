@@ -1,7 +1,10 @@
 package ro.company.controller;
 
 import org.junit.jupiter.api.Test;
+import ro.company.model.Course;
 import ro.company.model.Enrolment;
+import ro.company.model.Student;
+import java.util.List;
 
 import java.time.LocalDateTime;
 
@@ -18,6 +21,48 @@ class EnrolmentControllerTest {
         int i=enrolmentController.lastID();
         assertEquals(2,enrolmentController.nbOfDuplicates(enrolment));
         enrolmentController.delete(i);
+    }
+    @Test
+    public void testAddEnrolment(){
+        CourseController courseController = new CourseController();
+        courseController.add(new Course("Course test","Department test"));
+        int iC=courseController.lastID();
+        StudentController studentController = new StudentController();
+        studentController.add(new Student("F name test", "L name test", "email@test.com", 22));
+        int iS=studentController.lastID();
+
+        EnrolmentController enrolmentController = new EnrolmentController();
+        Enrolment enrolment = new Enrolment(iS,iC, LocalDateTime.now());
+
+        assertEquals(true,enrolmentController.add(enrolment));
+
+        int i=enrolmentController.lastID();
+        enrolmentController.delete(i);
+        courseController.delete(iC);
+        studentController.delete(iS);
+    }
+    @Test
+    public void testShowStudentEnrolments(){
+        CourseController courseController = new CourseController();
+        courseController.add(new Course("Course test","Department test"));
+        int iC=courseController.lastID();
+        StudentController studentController = new StudentController();
+        studentController.add(new Student("F name test", "L name test", "email@test.com", 22));
+        int iS=studentController.lastID();
+
+        EnrolmentController enrolmentController = new EnrolmentController();
+        Enrolment enrolment = new Enrolment(iS,iC, LocalDateTime.now());
+        enrolmentController.add(enrolment);
+
+        List<Enrolment> list = enrolmentController.showAllEnrolmentsForStudent(iS);
+
+        assertEquals(true, list.get(0).getStudentID()==iS && list.get(0).getCourseID()==iC);
+
+        int i=enrolmentController.lastID();
+        enrolmentController.delete(i);
+        courseController.delete(iC);
+        studentController.delete(iS);
+
     }
 
 }

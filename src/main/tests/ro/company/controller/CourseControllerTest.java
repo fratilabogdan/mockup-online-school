@@ -63,6 +63,28 @@ class CourseControllerTest {
         courseController.delete(id);
     }
     @Test
+    public void testGetCourseIDbyNameTrue(){
+        CourseController courseController = new CourseController();
+        String newName = "Test C ID Name True";
+        Course course = new Course(newName,"Dep1");
+        courseController.add(course);
+        int id= courseController.lastID();
+        int testID = courseController.getCourseIDfromName(newName);
+        assertEquals(true, id==testID);
+        courseController.delete(id);
+    }
+    @Test
+    public void testGetCourseIDbyNameFalse(){
+        CourseController courseController = new CourseController();
+        String newName = "Test C ID Name False";
+        Course course = new Course(newName,"Dep1");
+        courseController.add(course);
+        int id= courseController.lastID();
+        int testID = courseController.getCourseIDfromName(newName)-1;
+        assertEquals(false, id==testID);
+        courseController.delete(id);
+    }
+    @Test
     public void testUpdateCourseNameFalse(){
         CourseController courseController = new CourseController();
         String newName = "Test Update Name False";

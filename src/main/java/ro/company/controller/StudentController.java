@@ -8,6 +8,8 @@ import ro.company.repository.StudentRepository;
 
 import java.util.Iterator;
 import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 //Problem at end
 
@@ -24,9 +26,15 @@ public class StudentController {
 
     //CRUD
     public boolean add(Student student){
-        return studentRepository.add(student);
+        if(validMail(student.getEmail())&& 18<student.getAge() && student.getAge()<99){
+            return studentRepository.add(student);
+        }
+        return false;
     }
     public boolean delete(int id){
+        if(!containsID(id)){
+            return false;
+        }
         return studentRepository.delete(id);
     }
     public boolean updateFirstName(int id, String newName){
@@ -42,7 +50,7 @@ public class StudentController {
         return false;
     }
     public boolean updateEmail(int id, String newMail){
-        if(getStudent(id).getEmail().equals(newMail)==false){
+        if(!getStudent(id).getEmail().equals(newMail) && validMail(newMail)){
             return studentRepository.updateFirstName(id,newMail);
         }
         return false;
@@ -87,15 +95,28 @@ public class StudentController {
         return false;
     }
     public boolean validMail(String mail){
-        if(mail.contains(" ")){
-            return false;
-        }
-//        StringUtils.endsWith(".com");
-        for(int i=0;i<mail.length();i++){
-            if(mail.charAt(i)=='@'){
-
-            }
+        String regex = "^(.+)@(.+)$";
+        Pattern pattern = Pattern.compile(regex);
+        Matcher matcher = pattern.matcher(mail);
+        if(matcher.matches()){
+            return true;
         }
         return false;
+    }
+
+    public StudentRepository getStudentRepository() {
+        return studentRepository;
+    }
+
+    public void setStudentRepository(StudentRepository studentRepository) {
+        this.studentRepository = studentRepository;
+    }
+
+    public List<Student> getStudentList() {
+        return studentList;
+    }
+
+    public void setStudentList(List<Student> studentList) {
+        this.studentList = studentList;
     }
 }

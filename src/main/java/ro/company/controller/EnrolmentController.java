@@ -6,6 +6,7 @@ import ro.company.repository.EnrolmentRepository;
 import ro.company.repository.StudentRepository;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 public class EnrolmentController {
@@ -104,5 +105,16 @@ public class EnrolmentController {
             }
         }
         return false;
+    }
+    public List<Enrolment> showAllEnrolmentsForStudent(int id){
+        List<Enrolment> enrolmentListForStudent = new ArrayList<>();
+        Iterator<Enrolment> it= enrolmentRepository.allEnrolmentList().iterator();
+        while (it.hasNext()){
+            Enrolment enrolment = it.next();
+            if(enrolment.getStudentID()==id){
+                enrolmentListForStudent.add(enrolment);
+            }
+        }
+        return enrolmentListForStudent;
     }
 }
