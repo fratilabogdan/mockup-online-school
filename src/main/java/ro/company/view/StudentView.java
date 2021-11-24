@@ -19,8 +19,8 @@ public class StudentView {
     private EnrolmentController enrolments;
     private Scanner scanner;
 
-    public StudentView(){
-        this.student= new Student(1,"Bogdan","Java","love@java.com",23);//studentul logat
+    public StudentView(Student student){
+        this.student=student;
         this.courses= new CourseController();
         this.enrolments= new EnrolmentController();
         this.scanner=new Scanner(System.in);
@@ -28,10 +28,11 @@ public class StudentView {
 
 
     public void menuCourses(){
-        System.out.println("Apasa 1 pentru a vedea cursurile disponibile");
-        System.out.println("Apasa 2 pentru a vedea toate cursurile in care esti inscris");
-        System.out.println("Apasa 3 pentru a te inscrie la un curs");
-        System.out.println("Apasa 4 pentru a te scoate de la un curs");
+        System.out.println("Welcome "+this.student.getFirstName());
+        System.out.println("Press 1 to see available courses");
+        System.out.println("Press 2 to see all your enrolled courses");
+        System.out.println("Press 3 to enroll in a course");
+        System.out.println("Press 4 to delist/unenroll from a course");
     }
 
     public void play(){
@@ -73,7 +74,7 @@ public class StudentView {
                 String answer = scanner.nextLine();
                 if (answer.equals("y") || answer.equals("Y")) {
                     while (!enrolments.validIDs(enrolment)) {
-                        System.out.println("Course ID invalid. Please input correct ID");
+                        System.out.println("Course name invalid. Please input correct ID");
                         enrolment.setCourseID(courses.getCourseIDfromName(scanner.nextLine()));
                     }
                     enrolments.add(enrolment);
@@ -86,10 +87,10 @@ public class StudentView {
         System.out.println("Select a course name to delist from");
         String cName = scanner.nextLine();
         int courseID = courses.getCourseIDfromName(cName);
-        Enrolment enrolment = new Enrolment(this.student.getId(), courseID, LocalDateTime.now());
-        if (enrolments.validIDs(enrolment)) {
+        Enrolment enrolment = enrolments.getEnrolmentAfterIDs(student.getId(), courseID);
+        if (enrolment!=null) {
             System.out.println("Successfully delisted from " + cName);
-            enrolments.delete(courseID);
+            enrolments.delete(enrolment.getId());
         } else {
             System.out.println("Course name invalid. Retry? y/n");
             String answer = scanner.nextLine();

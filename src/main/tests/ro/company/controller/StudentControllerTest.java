@@ -20,10 +20,23 @@ class StudentControllerTest {
     }
 
     @Test
-    public void testAddStudent(){
+    public void testAddStudentTrue(){
         StudentController studentController = new StudentController();
         Student student = new Student("Add F Test", " Add L test", "mail@test.com", 55);
-        assertEquals(true, );
+        assertEquals(true, studentController.add(student));
+        studentController.delete(studentController.lastID());
+    }
+    @Test
+    public void testAddStudentFalse(){
+        StudentController studentController = new StudentController();
+        Student student = new Student("Add F Test", " Add L test", "mailFalse#test.com", 55);
+        assertEquals(false, studentController.add(student));
+    }
+    @Test
+    public void testUpdateFNameTrue(){
+        StudentController studentController = new StudentController();
+        Student student = new Student("Add F Test", " Add L test", "mailFalse#test.com", 55);
+        int i= studentController.lastID();
     }
 
 }

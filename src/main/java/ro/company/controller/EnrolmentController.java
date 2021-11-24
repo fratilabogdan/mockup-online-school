@@ -14,8 +14,8 @@ public class EnrolmentController {
     List<Enrolment> enrolmentList;
 
     public EnrolmentController(){
-        EnrolmentRepository enrolmentRepository = new EnrolmentRepository();
-        this.enrolmentRepository=enrolmentRepository;
+
+        this.enrolmentRepository= new EnrolmentRepository();
         this.enrolmentList= enrolmentRepository.allEnrolmentList();
     }
 
@@ -108,6 +108,8 @@ public class EnrolmentController {
     }
     public List<Enrolment> showAllEnrolmentsForStudent(int id){
         List<Enrolment> enrolmentListForStudent = new ArrayList<>();
+
+
         Iterator<Enrolment> it= enrolmentRepository.allEnrolmentList().iterator();
         while (it.hasNext()){
             Enrolment enrolment = it.next();
@@ -116,5 +118,15 @@ public class EnrolmentController {
             }
         }
         return enrolmentListForStudent;
+    }
+    public Enrolment getEnrolmentAfterIDs(int studentID, int courseID){
+        Iterator<Enrolment> it =showAllEnrolmentsForStudent(studentID).iterator();
+        while (it.hasNext()){
+            Enrolment e = it.next();
+            if(e.getCourseID()==courseID){
+                return e;
+            }
+        }
+        return null;
     }
 }

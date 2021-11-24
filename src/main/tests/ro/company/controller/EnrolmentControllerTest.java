@@ -64,5 +64,38 @@ class EnrolmentControllerTest {
         studentController.delete(iS);
 
     }
+    @Test
+    public void deleteEnrolmentTrue(){
+        CourseController courseController = new CourseController();
+        courseController.add(new Course("Course test","Department test"));
+        int iC=courseController.lastID();
+        StudentController studentController = new StudentController();
+        studentController.add(new Student("F name test", "L name test", "email@test.com", 22));
+        int iS=studentController.lastID();
+
+        EnrolmentController enrolmentController = new EnrolmentController();
+        Enrolment enrolment = new Enrolment(iS,iC, LocalDateTime.now());
+        enrolmentController.add(enrolment);
+        int id= enrolmentController.lastID();
+
+        assertEquals(true,enrolmentController.delete(id));
+        assertEquals(true, enrolmentController.getEnrolment(enrolmentController.lastID()).getStudentID()!=iS);
+
+        enrolmentController.delete(id);
+        courseController.delete(iC);
+        studentController.delete(iS);
+    }
+    @Test
+    public void deleteEnrolmentTrue2(){
+        EnrolmentController enrolmentController = new EnrolmentController();
+        int id=enrolmentController.lastID();
+        Enrolment enrolment = enrolmentController.getEnrolment(id);
+        System.out.println(enrolment.toString());
+        enrolmentController.delete(id);
+
+        id=enrolmentController.lastID();
+        Enrolment enrolment2 = enrolmentController.getEnrolment(id);
+        System.out.println(enrolment2.toString());
+    }
 
 }

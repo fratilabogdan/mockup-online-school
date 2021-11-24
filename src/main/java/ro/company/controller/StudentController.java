@@ -119,4 +119,13 @@ public class StudentController {
     public void setStudentList(List<Student> studentList) {
         this.studentList = studentList;
     }
+    public Student checkUser(String email, int id){
+
+
+        if(email.equals(getStudent(id).getEmail())){
+            return getStudent(id);
+        }
+        return null;
+    }
+
 }
